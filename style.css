@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'MyFont';
+  src: url('./assets/PixelMplus12-Regular.ttf');
+}
+
+body {
+  margin: 0;
+  /* font-family: 'MyFont'; */
+}
+
+.main-container {
+  background-image: url('./assets/back_img.jpg');  
+  background-size: cover;
+  height: 100vh;
+}
+
+.main-wrapper {
+  /* display: flex; */
+}
+
+.book-image {
+  width: 240px;
+  position: absolute;
+  left: 3%;
+  top: 40%;
+}
+
+.book-image img {
+   width: 240px;
+}
+
+.timer {
+  color: #fff;
+  font-size: 15vw;
+  text-align: center;
+  height: 50vh;
+  line-height: 2;
+}
+
+.log-wrapper {
+  position: absolute;
+  right: 3%;
+  bottom: 3%;
+}
+
+#book-log {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+}
+
+#book-log:focus {
+  outline: 0;
+}
