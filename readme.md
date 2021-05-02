@@ -17,7 +17,8 @@
 - ポモドーロごとのメモ欄
 
 javascript
-- vue.js
+- pure.js
+- フレームワーク無しで疑似SPAを実装
 
 nes.css
 - ファミコン風ライブラリ
