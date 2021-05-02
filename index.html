@@ -12,20 +12,31 @@
 <body>
 
   <div class="main-container">
+    <header>
+      <a href="timerPage">ポモドーロ</a>
+      <a href="booksPage">書籍管理</a>
+    </header>
 
-    <div class="main-wrapper">
+    <div class="main-wrapper" style="display: none;" id="booksPage">
+      <h1>書籍管理ページ</h1>
+    </div>
+
+    <div class="main-wrapper" id="timerPage">
       
-      <div class="timer">
-        00:00
+      <div class="timer-wrapper">
+        <span id="timer">00:00</span>
+        <button id="timerBtn">start</button>
       </div>
 
-      <div class="book-image">
+
+      <div class="book-image" id="bookImage">
         <img src="./documents/samplebook.jpg" alt="">
       </div>
 
       <div class="log-wrapper">
-        <textarea name="book-log" id="book-log" cols="30" rows="15"></textarea>
+        <textarea class="book-log" name="book-log" id="bookLog" cols="30" rows="100"></textarea>
       </div>
+
     </div>
 
   </div>
