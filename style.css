@@ -133,6 +133,19 @@ h1 {
 }
 
 /* booksPageのCSS */
+.nes-field {
+  width: 40%;
+  margin: 20px auto;
+}
+.nes-input {
+  background-color: transparent;
+  color: #fff;
+}
+.nes-input::placeholder {
+  opacity: .7;
+  color: #fff;
+}
+
 .book-img-wrapper {
   display: flex;
   justify-content: space-evenly;
@@ -154,7 +167,24 @@ h1 {
   max-width: 180px;
   opacity: .9;
 }
+
+
+/* スマホサイズ */
 @media screen and (max-width:400px) {
+  .nes-field {
+    width: 80%;
+    margin: auto;
+    margin-top: 30px;
+  }
+  .nes-input {
+    color: #000;
+    height: 30px;
+  }
+  .nes-input::placeholder {
+    color: #000;
+    font-size: 12px;
+    opacity: .7;
+  }
   .book-img-wrapper img {
     width: 28vw;
   }
