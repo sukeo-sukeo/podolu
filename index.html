@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" /> -->
+  <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" id="nes" disabled/>
   <link rel="stylesheet" href="./style.css">
   <title>ポモドーる？</title>
 </head>
@@ -13,14 +13,13 @@
 
   <div class="main-container">
     <header>
+      <!-- hrefとmain-wrapperのid名は合わせること -->
       <a href="timerPage">ポモドーロ</a>
       <a href="booksPage">書籍管理</a>
+      <a href="singlPage">個別ページ</a>
     </header>
 
-    <div class="main-wrapper" style="display: none;" id="booksPage">
-      <h1>書籍管理ページ</h1>
-    </div>
-
+    <!-- ポモドーロタイマーページのHTML -->
     <div class="main-wrapper" id="timerPage">
       
       <div class="timer-wrapper">
@@ -36,6 +35,35 @@
       <div class="log-wrapper">
         <textarea class="book-log" name="book-log" id="bookLog" cols="30" rows="100"></textarea>
       </div>
+
+    </div>
+
+    <!-- 書籍管理ページのHTML -->
+    <div class="main-wrapper" id="booksPage">
+      <div class="title-wrapper">
+        <h1>書籍管理ページ</h1>
+      </div>
+      <ul class="book-img-wrapper">
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+        <li><img src="./documents/samplebook.jpg" alt="title"></li>
+       
+        
+      </ul>
+    </div>
+    
+    <!-- 書籍の個別モーダルのHTML -->
+    <div class="main-wrapper" id="singlPage">
+      <h1>個別ページ</h1>
 
     </div>
 

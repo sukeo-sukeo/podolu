@@ -1,31 +1,35 @@
 'use strict'
 
-const main = () => {
-  // 最初にすべて描画
-  ViewControl.pomodoloPage();
-  //ViewControl.booksPage();
-  //data取得
+// import {nesCSS} from './setting.js'
 
-  // 疑似SPAのpage遷移を設定
+const main = (views) => {
+  // イベントセットとデータ取得し最初に全ページ描画
+  views.pomodoloPage();
+  views.booksPage();
+  // get.data()
+
+  // page遷移イベントを設定
   [...document.getElementsByTagName('a')].forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
       const pagename = a.href.split('/').pop()
-      ViewControl.update(pagename)
+      views.update(pagename)
     })
   })
 
 }
 
+//views
 class ViewControl {
-
   // display:none;を付け替えてページ切り替え
-  static update = (href) => {
+  update(href) {
     const mainpages = document.getElementsByClassName("main-wrapper");
 
-    // `.main-wrapperのid`と`クリックしたaタグのhref`が同じならdisplayを表示。それ以外は非表示
+    // `.main-wrapperのid名`と`クリックしたaタグのhref名`が同じdisplayを表示。それ以外は非表示にする.
     [...mainpages].forEach((page) => {
-      if (page.id === href) {
+      if (page.id === href) { 
+        //適用cssの判定
+        this._judgeCSSframWork(page)
         page.style.display = "";
       } else {
         page.style.display = "none";
@@ -33,24 +37,56 @@ class ViewControl {
     });
   }
 
-  //タイマーページ描画
-  static pomodoloPage = () => {
+  //タイマーページ
+  pomodoloPage() {
+    console.log("timerPage ok");
+    
     const timer = new Timer();
     const diary = new Diary();
-  
+    
     timer.btn.addEventListener('mousedown', () => 
-      timer.startTime = performance.now());
-  
+    timer.startTime = performance.now());
+    
     timer.btn.addEventListener("mouseup", () => {
       timer.leaveTime = performance.now();
       const pushTime = timer.leaveTime - timer.startTime 
       timer.pushJudege(pushTime)
     });
   }
+  
+  //書籍管理ページ
+  booksPage() {
+    console.log('booksPage ok');
+    this._adjustLayout()
+  }
 
+  //flex最終行左寄せの処理
+  _adjustLayout() {
+    const parent = document.getElementsByClassName("book-img-wrapper")[0];
+    const children = parent.children;
+    const max_cnt = 4;
+    const add_cnt = (max_cnt - (children.length % max_cnt));
+    const damey = `<li><img></li>`;
+    console.log(add_cnt);
+    for (let i = 0; i < add_cnt; i++) {
+      parent.insertAdjacentHTML("beforeend", damey);
+    }
+  }
+
+
+  //timerPageではnesCSSは適用しない
+  _judgeCSSframWork(page) {
+    const nesLink = document.getElementById("nes");
+    if (page.id === "timerPage") {
+      nesLink.disabled = true;
+    } else {
+      nesLink.disabled = false;
+    }
+  }
 
 }
 
+//compornents
 class Timer {
   constructor() {
     this.timer = document.getElementById("timer");
@@ -148,6 +184,10 @@ class Diary {
 }
 
 window.onload = () => {
-  main()
+  const views = new ViewControl();
+  //初期画面のidを渡す
+  views.update('booksPage')
+
+  main(views)
 
 }
