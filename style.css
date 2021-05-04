@@ -2,6 +2,11 @@
   font-family: 'MyFont';
   src: url('./assets/PixelMplus12-Regular.ttf');
 }
+/* timerページ以外はファミコン風フォント */
+.main-wrapper:not(#timerPage) {
+  font-family: 'MyFont';
+}
+
 
 body {
   margin: 0;
@@ -30,7 +35,6 @@ h1 {
   background-size: cover;
   height: 100vh;  
   background-attachment: fixed;
-  font-family: 'MyFont';
   overflow: scroll;
 }
 
@@ -166,6 +170,47 @@ h1 {
   width: 18vw;
   max-width: 180px;
   opacity: .9;
+}
+
+/* 検索ダイアログ */
+#searchDialog {
+  width: 100%;
+  height: 90%;
+}
+#searchDialog .search-fields {
+  width: 80%;
+}
+#searchDialog .dialog-menu {
+  float: right;
+}
+#searchDialog .sub-field {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+#searchDialog .scan-btn {
+  flex-grow: 2;
+}
+#searchDialog #searchBtn {
+  flex-grow: 1;
+}
+
+td:first-of-type {
+  width: 20%;
+  text-align: center;
+}
+.item {
+  display: flex;
+  margin-bottom: 30px;
+}
+.item a {
+  display: inline-block;
+  height: fit-content;
+  margin-top: 10px;
+}
+/* nes-tableのabsoluteを打ち消す */
+.nes-table.is-dark::before {
+  z-index: -1;
 }
 
 

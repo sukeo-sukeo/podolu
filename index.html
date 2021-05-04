@@ -16,7 +16,7 @@
       <!-- hrefとmain-wrapperのid名は合わせること -->
       <a href="timerPage">ポモドーロ</a>
       <a href="booksPage">書籍管理</a>
-      <a href="singlPage">個別ページ</a>
+      
     </header>
 
     <!-- ポモドーロタイマーページのHTML -->
@@ -41,20 +41,50 @@
     <!-- 書籍管理ページのHTML -->
     <div class="main-wrapper" id="booksPage">
       <div class="nes-field is-inline">
-        <input type="text" class="nes-input is-success" placeholder="本のタイトル もしくは ISBNコードで検索">
+        <input 
+        type="text" 
+        class="nes-input is-success"
+        placeholder="本のタイトル もしくは ISBNコードで検索"
+        onclick="document.getElementById('searchDialog').showModal();"
+        >
       </div>
       <ul class="book-img-wrapper">
+        <!-- 書籍データ表示 -->
         <li><img src="./documents/samplebook.jpg" alt="title"></li>
-        <li><img src="./documents/samplebook.jpg" alt="title"></li>
-        
-        
+        <li><img src="./documents/samplebook.jpg" alt="title"></li> 
       </ul>
     </div>
     
-    <!-- 書籍の個別モーダルのHTML -->
-    <div class="main-wrapper" id="singlPage">
-      <h1>個別ページ</h1>
+    <!-- 書籍検索モーダルのHTML -->
+    <div class="main-wrapper" id="searchModal">
+      <section>
+        <dialog 
+         class="nes-dialog is-dark is-rounded" id="searchDialog">
+          <form method="dialog">
+            <menu class="dialog-menu">
+              <button class="nes-btn">閉じる</button>
+            </menu>
+            <p class="title">書籍の検索</p>
+            <!-- 検索入力フィールド -->
+            <div class="nes-field search-fields">
+              <label for="title_field">タイトル・ISBN</label>
+              <input type="text" id="searchField" class="nes-input is-dark">
+              <div class="sub-field">
+                <div class="scan-btn">
+                  <span>本のバーコードをスキャン</span>
+                  <i class="nes-icon instagram"></i>
+                </div>
+                <button class="nes-btn is-primary" id="searchBtn">検索</button>
+              </div>
+            </div>
+          </form>
 
+          <div id="result">
+          
+          </div>
+
+        </dialog>
+      </section>
     </div>
 
   </div>
