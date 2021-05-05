@@ -194,6 +194,14 @@ h1 {
 #searchDialog #searchBtn {
   flex-grow: 1;
 }
+#result .img-wrapper {
+  text-align: center;
+}
+#result .regist-btn {
+  color: #000;
+  width: 80%;
+  margin-top: 10px;
+}
 
 td:first-of-type {
   width: 20%;
@@ -207,6 +215,9 @@ td:first-of-type {
   display: inline-block;
   height: fit-content;
   margin-top: 10px;
+}
+.nes-table.is-dark {
+  width: -webkit-fill-available;
 }
 /* nes-tableのabsoluteを打ち消す */
 .nes-table.is-dark::before {

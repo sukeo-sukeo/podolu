@@ -24,37 +24,47 @@ class Search {
     const items = data.items.map((item) => {
       let vi = item.volumeInfo;
       // let si = item.saleInfo;
+      // console.log(String(vi.description).length);
       return {
         title: vi.title,
-        description: vi.description?vi.description:'未登録',
+        description: vi.description ? vi.description :'未登録',
         link: vi.infoLink,
         publisher: vi.publisher ? vi.publisher : "未登録",
         date: vi.publishedDate ? vi.publishedDate : "未登録",
         pageCount: vi.pageCount ? vi.pageCount : "未登録",
         // "2013-05-23"
-        image: vi.imageLinks ? vi.imageLinks.smallThumbnail : "",
+        image: vi.imageLinks ? vi.imageLinks.smallThumbnail : "../assets/no_image.png",
       };
     });
     return items;
   }
 
 
-
   _checkPattern(input) {
-    const pattern10 = /^[-]?([1-9]{10}d*|0)$/;
-    const pattern13 = /^[-]?([1-9]{13}d*|0)$/;
-    console.log(pattern10.test(input.value));
-    console.log(pattern13.test(input.value));
-    if (pattern10.test(input.value) || pattern13.test(input.value)) {
-      console.log('isbn');
-      console.log(input.value);
+    //10桁以上13桁以下の数字かどうかをチェック
+    const pattern = /^([0-9]{10,13})$/;
+    console.log(pattern.test(input.value));
+    if (pattern.test(input.value)) {
+      console.log("isbn");
       this.q = `isbn:${input.value}`;
     } else {
-      console.log('テキスト');
-      console.log(input.value);
+      console.log("テキスト");
       this.q = input.value;
     }
   }
+
+  static setRegistEvent(items) {
+    const btns = document.getElementsByClassName('regist-btn');
+    [...btns].forEach((btn, i) => {
+      btn.setAttribute('id', i)
+      btn.addEventListener('click', e => {
+        console.log(items[e.target.id]);
+        //ブックデータをdatabaseに登録
+      })
+    })
+  }
+
+
 }
 
 export default Search;

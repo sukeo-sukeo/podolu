@@ -58,51 +58,77 @@ class ViewControl {
   }
 
   searchDialog() {
+    const field = document.getElementById('searchField')
+    const modal = document.getElementById('searchModal')
     const btn = document.getElementById('searchBtn')
-    const result = document.getElementById('result') 
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault()
-      const items = await new Search().searchBooks();
-      if (!items) return;
-      console.log(items);
+    //フィールドがフォーカスされたとき全選択
+    field.onfocus = () => field.select();  
 
-      const texts = items.map(item => {
-        return `
-        <div class="item">
-          <a href="${item.link}">
-            <img src="${item.image}" alt="">
-          </a>
-          <div class="nes-table-responsive">
-            <table class="nes-table is-bordered is-dark">
-              <tbody>
-                <tr>
-                  <td>タイトル</td>
-                  <td>${item.title}</td>
-                </tr>
-                <tr>
-                  <td>説明</td>
-                  <td>${item.description}</td>
-                </tr>
-                <tr>
-                  <td>出版社/出版日</td>
-                  <td>${item.publisher} / ${item.date}</td>
-                </tr>
-                <tr>
-                  <td>ページ数</td>
-                  <td>${item.pageCount}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>`;
-      })
-      result.innerHTML = texts.join('')
-    })
+    //エンターキーでも検索処理発動
+    modal.addEventListener('keydown', e => {
+      if (e.key === "Enter" && !e.isComposing) {
+        e.preventDefault();
+        this._fetchAPI();
+      }
+    });
+    
+    //検索ボタンで検索処理発動
+    btn.addEventListener('click', (e) => {
+      e.preventDefault()
+      this._fetchAPI()
+    });
   }
 
+  async _fetchAPI() {
+    // search処理は別ファイルに記載
+    const items = await new Search().searchBooks();
+    const result = document.getElementById("result"); 
+    
+    console.log(items);
+    if (!items) {
+      result.innerHTML = `<h2 style="text-align:center;">見つかりませんでした<h2>`;
+      return;
+    }
+
+    const texts = items.map(item => {
+      return `
+      <div class="item">
+        <div class="img-wrapper">
+          <a href="${item.link}" target="_blank">
+            <img src="${item.image}" alt="NoImage" width=128 height=185>
+          </a>
+          <button class="nes-btn is-success regist-btn">登録</button>
+        </div>
+        <div class="nes-table-responsive" style="width: 100%;">
+          <table class="nes-table is-bordered is-dark">
+            <tbody>
+              <tr>
+                <td>タイトル</td>
+                <td>${item.title}</td>
+              </tr>
+              <tr>
+                <td>説明</td>
+                <td style="height:150px;">${item.description}</td>
+              </tr>
+              <tr>
+                <td>出版社/出版日</td>
+                <td>${item.publisher} / ${item.date}</td>
+              </tr>
+              <tr>
+                <td>ページ数</td>
+                <td>${item.pageCount}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+    });
+    result.innerHTML = texts.join('')
+    document.getElementById("searchField").blur();
+    Search.setRegistEvent(items)
+ }
+
   
-
-
   //timerPageではnesCSSは適用しない
   _judgeCSSframWork(page) {
     const nesLink = document.getElementById("nes");
