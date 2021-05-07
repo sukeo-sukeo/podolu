@@ -45,7 +45,7 @@
         type="text" 
         class="nes-input is-success"
         placeholder="本のタイトル もしくは ISBNコードで検索"
-        onclick="document.getElementById('searchDialog').showModal();"
+        onclick="document.getElementById('editDialog').showModal();"
         >
       </div>
       <ul class="book-img-wrapper" id="liblary">
@@ -55,7 +55,7 @@
     </div>
     
     <!-- 書籍検索モーダルのHTML -->
-    <div class="main-wrapper" id="searchModal">
+    <div id="searchModal">
       <section>
         <dialog 
          class="nes-dialog is-dark is-rounded" id="searchDialog">
@@ -85,6 +85,37 @@
         </dialog>
       </section>
     </div>
+
+    <!-- 編集モーダルのHTML -->
+    <div id="editModal">
+      <section>
+        <dialog 
+         class="nes-dialog is-dark is-rounded" id="editDialog">
+          <form method="dialog">
+            <menu class="dialog-menu">
+              <button class="nes-btn" id="editCloseBtn">閉じる</button>
+            </menu>
+            <h2 class="title">書籍情報の編集</h2>
+            <div class="nes-field is-inline edit-field">
+              <label for="title_field">タイトル・ISBN</label>
+              <input type="text" class="nes-input is-dark" value="loading">
+              <label for="title_field">タイトル・ISBN</label>
+              <input type="text" class="nes-input is-dark" value="loading">
+              <label for="title_field">タイトル・ISBN</label>
+              <input type="text" class="nes-input is-dark" value="loading">
+              <label for="title_field">タイトル・ISBN</label>
+              <input type="text" class="nes-input is-dark" value="loading">
+            </div>
+          </form>
+
+        </dialog>
+      </section>
+    </div>
+
+
+
+
+
   </div>
 
   <!-- ファイヤーベース本体 -->

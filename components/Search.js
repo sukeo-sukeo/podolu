@@ -50,6 +50,10 @@ class Search {
                 <td>ページ数</td>
                 <td>${item.pageCount}</td>
               </tr>
+              <tr>
+                <td>ISBN</td>
+                <td>${item.isbn}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -66,14 +70,16 @@ class Search {
 
     const res = await fetch(`${this.endpoint}/volumes?q=${this.q}`);
     const data = await res.json();
-    console.log(data);
+    
     if (!data.totalItems) return;
 
+    console.log(data);
     const itemCount = data.totalItems;
     console.log(itemCount);
 
     const items = data.items.map((item) => {
       let vi = item.volumeInfo;
+      let isbn = this._getIsbn(vi)
       // let si = item.saleInfo;
       // console.log(String(vi.description).length);
       return {
@@ -87,10 +93,42 @@ class Search {
         image: vi.imageLinks
           ? vi.imageLinks.smallThumbnail
           : "../assets/no_image.png",
+        isbn: isbn,
       };
     });
     this.r = items;
     return items;
+  }
+
+  _getIsbn(vi) {
+    let isbnArray = vi.industryIdentifiers;
+    let isbnA, isbnB;
+    let _ = '未登録';
+    
+    if (!isbnArray)
+      return _;
+    
+    isbnA = isbnArray[0].identifier;
+    if (isbnArray.length === 1) {
+      isbnB = _;
+    } else {
+      isbnB = isbnArray[1].identifier;
+    }
+
+    if (isbnArray.length === 1)
+      return isbnA.length > 13 ? _ : isbnA; 
+    
+    if (isbnA.length > 13) isbnA = _;
+    if (isbnB.length > 13) isbnA = _;
+    if (isbnA === _ && isbnB === _)
+      return _;
+    
+    if (isbnA === _ && isbnB.length === 10 ||
+        isbnB === _ && isbnA.length === 13 ||
+        isbnA.length > isbnB.length)
+      return `${isbnB} / ${isbnA}`;
+   
+    return `${isbnA} / ${isbnB}`;
   }
 
   _checkPattern(input) {
@@ -108,8 +146,7 @@ class Search {
 
   setRegistEvent() {
     const btns = document.getElementsByClassName("regist-btn");
-    console.log(btns);
-    // console.log(items);
+    
     [...btns].forEach((btn, i) => {
       btn.setAttribute("id", i);
       btn.addEventListener("click", async (e) => {

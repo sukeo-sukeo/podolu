@@ -11,7 +11,6 @@ class ViewControl {
     const mainpages = document.getElementsByClassName("main-wrapper");
     // `.main-wrapperのid名`と`クリックしたaタグのhref名`が同じdisplayを表示。それ以外は非表示にする.
     [...mainpages].forEach((page) => {
-      if (page.id === 'searchModal') return;
       if (page.id === href) { 
         //適用cssの判定
         this._judgeCSSframWork(page)
@@ -58,8 +57,8 @@ class ViewControl {
     __adjustLayout()
   }
 
+  //書籍検索ダイアログ
   searchDialog() {
-    
     //フィールドがフォーカスされたとき全選択
     const field = document.getElementById('searchField')
     field.onfocus = () => field.select();  
@@ -83,9 +82,15 @@ class ViewControl {
       // 結果が表示されたらフォーカスを外す
       field.blur();
     });
-
   }
 
+  // 書籍情報編集ダイアログ
+  editBookDialog() {
+
+  }
+  
+
+  // 書籍を検索しHTMLに表示
   async _searchBooks() {
     const result = document.getElementById("result");
     const search = new Search();
@@ -93,7 +98,7 @@ class ViewControl {
     result.innerHTML = items;
     search.setRegistEvent();
   }
-  
+
   //timerPageではnesCSSは適用しない
   _judgeCSSframWork(page) {
     const nesLink = document.getElementById("nes");
