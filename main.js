@@ -1,6 +1,6 @@
 'use strict'
 
-import ViewControl from './views.js';
+import ViewControl from './components/views.js';
 
 const main = (views) => {
   // 各viewのイベントセットとデータ取得
@@ -22,6 +22,7 @@ const main = (views) => {
 
 
 window.onload = () => {
+
   const views = new ViewControl();
   //初期画面のidを渡す
   views.update('booksPage')

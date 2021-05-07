@@ -16,7 +16,7 @@
       <!-- hrefとmain-wrapperのid名は合わせること -->
       <a href="timerPage">ポモドーロ</a>
       <a href="booksPage">書籍管理</a>
-      
+      <button id="testbtn">読み出し</button>
     </header>
 
     <!-- ポモドーロタイマーページのHTML -->
@@ -48,10 +48,8 @@
         onclick="document.getElementById('searchDialog').showModal();"
         >
       </div>
-      <ul class="book-img-wrapper">
+      <ul class="book-img-wrapper" id="liblary">
         <!-- 書籍データ表示 -->
-        <li><img src="./documents/samplebook.jpg" alt="title"></li>
-        <li><img src="./documents/samplebook.jpg" alt="title"></li> 
       </ul>
     
     </div>
@@ -89,7 +87,20 @@
     </div>
   </div>
 
+  <!-- ファイヤーベース本体 -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+  <!-- ファイヤーベースUI -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css" /> -->
+  <!-- アナリティクス -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script> -->
+  <!-- オース -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+  <!-- ファイヤーストア -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
+
   <script src="./assets/anime.min.js"></script>
+  <script src="./functions.js"></script>
   <script src="./main.js" type="module"></script>
 </body>
 
