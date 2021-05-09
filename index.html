@@ -28,12 +28,14 @@
       </div>
 
 
+
       <div class="book-image" id="bookImage">
-        <img src="./documents/samplebook.jpg" alt="">
+        <p><span class="pomo-count" id="pomoCount">0</span>ポモドーロ</p>
+        <img id="pomoBook" src="./assets/no_image.png" alt="">
       </div>
 
       <div class="log-wrapper">
-        <textarea class="book-log" name="book-log" id="bookLog" cols="30" rows="100"></textarea>
+        <textarea class="book-log" name="book-log" id="bookLog" cols="30" rows="200"></textarea>
       </div>
 
     </div>
@@ -45,7 +47,7 @@
         type="text" 
         class="nes-input is-success"
         placeholder="本のタイトル もしくは ISBNコードで検索"
-        onclick="document.getElementById('editDialog').showModal();"
+        onclick="document.getElementById('searchDialog').showModal();"
         >
       </div>
       <ul class="book-img-wrapper" id="liblary">
@@ -55,7 +57,7 @@
     </div>
     
     <!-- 書籍検索モーダルのHTML -->
-    <div id="searchModal">
+    <div class="main-modal" id="searchModal">
       <section>
         <dialog 
          class="nes-dialog is-dark is-rounded" id="searchDialog">
@@ -87,30 +89,34 @@
     </div>
 
     <!-- 編集モーダルのHTML -->
-    <div id="editModal">
+    <div class="main-modal" id="editModal">
       <section>
         <dialog 
          class="nes-dialog is-dark is-rounded" id="editDialog">
           <form method="dialog">
             <menu class="dialog-menu">
-              <button class="nes-btn" id="editCloseBtn">閉じる</button>
+              <button class="nes-btn is-success" id="startPomodoloBtn">ポモドーロする</button>
             </menu>
             <h2 class="title">書籍情報の編集</h2>
-            <div class="nes-field is-inline edit-field">
-              <label for="title_field">タイトル・ISBN</label>
-              <input type="text" class="nes-input is-dark" value="loading">
-              <label for="title_field">タイトル・ISBN</label>
-              <input type="text" class="nes-input is-dark" value="loading">
-              <label for="title_field">タイトル・ISBN</label>
-              <input type="text" class="nes-input is-dark" value="loading">
-              <label for="title_field">タイトル・ISBN</label>
-              <input type="text" class="nes-input is-dark" value="loading">
+            <div class="nes-field is-inline edit-field-wrapper" id="editBox">
+              <!-- jsで編集画面挿入 -->
+            </div>
+            <div class="edit-memo-wrapper" id="memoBox"
+            
+            
+            >
+             <!-- jsでメモ画面挿入 -->
+            </div>
+            <div style="float: right;">
+              <button class="nes-btn" id="editCloseBtn">閉じる</button>
+              <button class="nes-btn is-primary" id="modifiedBtn"
+              >変更する</button>
             </div>
           </form>
-
         </dialog>
       </section>
     </div>
+
 
 
 

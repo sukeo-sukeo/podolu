@@ -23,10 +23,10 @@ const main = (views) => {
 
 window.onload = () => {
 
+  
   const views = new ViewControl();
   //初期画面のidを渡す
-  views.update('booksPage')
-
+  views.update(page.books)
   main(views)
 
 }

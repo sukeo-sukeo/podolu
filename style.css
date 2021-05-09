@@ -3,7 +3,7 @@
   src: url('./assets/PixelMplus12-Regular.ttf');
 }
 /* timerページ以外はファミコン風フォント */
-.main-wrapper:not(#timerPage) {
+.main-wrapper:not(#timerPage), .main-modal {
   font-family: 'MyFont';
 }
 
@@ -44,7 +44,13 @@ h1 {
   height: 100vh;
   font-family: 'MyFont';
 }
-
+.title {
+  text-align: center;
+}
+.pomo-count {
+  font-size: 50px;
+  vertical-align: text-bottom;
+}
 /* .main-wrapper {
   display: flex;
 } */
@@ -56,9 +62,17 @@ h1 {
   left: 3%;
   top: 40%;
 }
-
 .book-image img {
    width: 240px;
+}
+.book-image p {
+  font-family: Georgia, serif;
+  color: #fff;
+  margin: 0;
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .timer-wrapper {
@@ -137,15 +151,15 @@ h1 {
 }
 
 /* booksPageのCSS */
-.nes-field {
+#booksPage .nes-field {
   width: 40%;
   margin: 20px auto;
 }
-.nes-input {
+#booksPage .nes-input {
   background-color: transparent;
   color: #fff;
 }
-.nes-input::placeholder {
+#booksPage .nes-input::placeholder {
   opacity: .7;
   color: #fff;
 }
@@ -174,7 +188,10 @@ h1 {
 }
 
 /* 検索ダイアログ */
-#searchDialog {
+.dialog-menu {
+  margin: 0;
+}
+#searchDialog, #editDialog {
   width: 100%;
   height: 90%;
 }
@@ -223,6 +240,56 @@ td:first-of-type {
 /* nes-tableのabsoluteを打ち消す */
 .nes-table.is-dark::before {
   z-index: -1;
+}
+
+#editDialog .edit-field-wrapper {
+  display: flex;
+  width: 100%;
+}
+#editDialog .edit-field-image {
+  position: relative;
+  flex-grow: 2;
+  text-align: center;
+}
+#editDialog .edit-field {
+  flex-grow: 5;
+  /* display: flex;
+  flex-direction: column; */
+}
+#editDialog .edit-field textarea {
+  height: 100px;
+}
+#editDialog .edit-field-inner {
+  height: 16px;
+  border: none;
+  border-bottom: 1px solid;
+}
+.edit-field-inner:focus {
+  outline: 0;
+  outline : none;
+}
+#editDialog p {
+  position: absolute;
+  left: 25%;
+  top: -20%;
+  transform: rotate(-15deg);
+  font-size: 24px;
+}
+#editDialog .pomo-count {
+  font-size: 75px;
+  vertical-align: initial;
+}
+#editDialog .edit-memo {
+  text-align: center;
+}
+#editDialog #edit_memo {
+  border: none;
+  border-bottom: 1px solid;
+  width: 95%;
+}
+#edit_memo {
+  outline: 0;
+  outline : none;
 }
 
 

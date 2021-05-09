@@ -8,14 +8,20 @@ class DB {
     this.uid = "MGFOqcA8I2eVYLAE4PwrvJ0M53s1";
   }
   
+  //DBへの登録
   async add(item) {
     const ref = await db.db.collection("users").doc(this.uid);
 
+    //カスタムプロパティ
+    const { time, mili } = __getTime()
+    item.registedAt = time
+    item.modifideAt = time;
+    item.sortKey = mili
     item.uid = this.uid
     item.iid = this.iid
-    const { time, mili } = __getTime()
-    item.regitedAt = time
-    item.sortKey = mili
+    item.pomoCount = 0;
+    item.memo = '';
+    item.myRating = 0;
     console.log(item);
     
     ref.set({ [this.iid]: item }, { merge: true })
@@ -24,18 +30,7 @@ class DB {
       });
   }
 
-  set(item) {
-    db.db.collection("books")
-      .doc("1")
-      .set({ item })
-      .then((docRef) => {
-        // success
-      })
-      .catch((error) => {
-        // error
-      });
-  }
-
+  //登録後の１件読み出し
   async readone(iid) {
     return db.db.collection("users").doc(this.uid)
     .get()
@@ -48,6 +43,7 @@ class DB {
     })
   }
 
+  //初期読み込み
   async read() {
     const doc = await db.db.collection("users")
       .doc(this.uid).get();
@@ -62,6 +58,7 @@ class DB {
       beforeSortObj.push(dataList[key]);
     })
 
+    //sortKeyでソート
     return beforeSortObj.sort((a, b) => {
       if (a.sortKey < b.sortKey) {
         return -1;
@@ -72,6 +69,7 @@ class DB {
     
   }
 
+  //全部消すやつ(今のところdev用)
   delete() {
     db.db.collection("users").doc(this.uid).delete().then(() => {
       console.log('delete');
@@ -79,11 +77,34 @@ class DB {
       }).catch(error => {
           // error
       })
-        }
+  }
 
-        static update() {
 
-        }
+  async update(item) {
+    console.log('dbupdate');
+    db.db.collection("users").doc(this.uid).update({
+      [item.iid]: {
+        date: item.date,
+        description: item.description,
+        iid: item.iid,
+        image: item.image,
+        isbn: item.isbn,
+        link: item.link,
+        memo: item.memo,
+        modifideAt: item.modifideAt,
+        myRating: item.myRating,
+        pageCount: item.pageCount,
+        pomoCount: item.pomoCount,
+        publisher: item.publisher,
+        registedAt: item.registedAt,
+        sortKey: item.sortKey,
+        title: item.title,
+        uid: item.uid,
+      }
+    }).then(() => console.log('success!'))
+    .catch((error) => console.log('error: ', error))
+  }
+  
 
 }
 
