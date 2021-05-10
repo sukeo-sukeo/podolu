@@ -71,19 +71,22 @@
               <label for="title_field">タイトル・ISBN</label>
               <input type="text" id="searchField" class="nes-input is-dark">
               <div class="sub-field">
-                <div class="scan-btn">
+                <button id="goStop">ストップ</button>
+                <button id="goScan">スキャン</button>
+                <div class="scan-btn" id="scan">
                   <span>本のバーコードをスキャン</span>
                   <i class="nes-icon instagram"></i>
+                  <div id="scanResult"></div>
                 </div>
                 <button class="nes-btn is-primary" id="searchBtn">検索</button>
               </div>
             </div>
           </form>
 
+          <button class="nes-btn buun-btn" id="buunBtn">ビューン</button>
           <div id="result">
             
           </div>
-
         </dialog>
       </section>
     </div>
@@ -117,6 +120,20 @@
       </section>
     </div>
 
+    <!-- <div class="sub-modal">
+      <section>
+        <dialog class="nes-dialog is-dark is-rounded" id="editTextArea">
+          <form method="dialog">
+            <menu class="dialog-menu textarea-menu">
+              <p class="title" id="memoTitle"></p>
+              <button class="nes-btn" id="memoCloseBtn">書き終える</button>
+            </menu>
+            <textarea class="nes-textarea is-dark edit-memo" name="" id="editTextBox" cols="30" rows="20"></textarea>
+          </form>
+        </dialog>
+      </section>
+    </div> -->
+
 
 
 
@@ -137,6 +154,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
 
   <script src="./assets/anime.min.js"></script>
+  <script type="text/javascript" src="https://serratus.github.io/quaggaJS/examples/js/quagga.min.js"></script>
   <script src="./functions.js"></script>
   <script src="./main.js" type="module"></script>
 </body>

@@ -2,8 +2,9 @@
 
 import Diary from "./Diary.js";
 import Timer from "./Timer.js";
-import Search from './Search.js'
-import DB from './database.js'
+import Search from './Search.js';
+import DB from './database.js';
+import Scan from './Scan.js';
 
 class ViewControl {
   constructor() {
@@ -17,13 +18,12 @@ class ViewControl {
   }
   // display:none;を付け替えてページ切り替え
   update(href) {
-   
     const mainpages = document.getElementsByClassName("main-wrapper");
     // `.main-wrapperのid名`と`クリックしたaタグのhref名`が同じdisplayを表示。それ以外は非表示にする.
     [...mainpages].forEach((page) => {
-      if (page.id === href) { 
+      if (page.id === href) {
         //適用cssの判定
-        this._judgeCSSframWork(page)
+        this._judgeCSSframWork(page);
         page.style.display = "";
       } else {
         page.style.display = "none";
@@ -34,46 +34,45 @@ class ViewControl {
     if (this.pomoBook) {
       this.pomodoloPage();
     }
-    
-    
   }
-  
+
   //タイマーページ
-  pomodoloPage() { 
+  pomodoloPage() {
     //書籍選択時にタイマー画面へ遷移したときは書籍画像をセットしタイマー起動
     if (this.pomoBook) {
       const bookImg = document.getElementById("pomoBook");
-      const pomoCnt = document.getElementById('pomoCount');
-      const bookLog = document.getElementById('bookLog');
+      const pomoCnt = document.getElementById("pomoCount");
+      const bookLog = document.getElementById("bookLog");
       bookImg.src = this.pomoBook.image;
       pomoCnt.textContent = this.pomoBook.pomoCount;
-      bookLog.textContent = this.pomoBook.memo
-
+      bookLog.textContent = this.pomoBook.memo;
 
       // タイマーインスタンスにも書籍データを渡す
       this.timer.pb = this.pomoBook;
-  
+
       this.timer.reset();
       this.timer.start();
       return;
     }
 
     console.log("timerPage ok");
-    
-    this.timer.btn.addEventListener('mousedown', () => 
-    this.timer.startTime = performance.now());
-    
+
+    this.timer.btn.addEventListener(
+      "mousedown",
+      () => (this.timer.startTime = performance.now())
+    );
+
     this.timer.btn.addEventListener("mouseup", () => {
       this.timer.leaveTime = performance.now();
-      const pushTime = this.timer.leaveTime - this.timer.startTime 
-      this.timer.pushJudege(pushTime)
+      const pushTime = this.timer.leaveTime - this.timer.startTime;
+      this.timer.pushJudege(pushTime);
     });
   }
-  
+
   //書籍管理ページ
   async booksPage() {
     console.log("booksPage ok");
-    
+
     const items = await this.db.read();
 
     if (!items) return;
@@ -90,94 +89,42 @@ class ViewControl {
     //レイアウト調整
     __adjustLayout();
 
+
     //編集ダイアログ開閉のイベントセット
-    
-    this._setEvent_editDialog(items)
-  }
-
-  //書籍検索ダイアログ
-  searchDialog() {
-    //フィールドがフォーカスされたとき全選択
-    const field = document.getElementById('searchField')
-    field.onfocus = () => field.select();  
-    
-    //エンターキーでも検索処理発動
-    const modal = document.getElementById('searchModal')
-    modal.addEventListener('keydown', (e) => {
-      if (e.key === "Enter" && !e.isComposing) {
-        e.preventDefault();
-        this._searchBooks()
-        // 結果が表示されたらフォーカスを外す
-        field.blur();
-      }
-    });
-    
-    //検索ボタンで検索処理発動
-    const btn = document.getElementById('searchBtn')
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      this._searchBooks();
-      // 結果が表示されたらフォーカスを外す
-      field.blur();
-    });
-  }
-
-  //書籍編集ダイアログのイベント
-  //searchインスタンスにも同じメソッドの記載あり(dbに追加したアイテムへの設定のため)
-  _setEvent_editDialog(items) {
-    // 書籍クリックで編集ダイアログ表示
     const books = [...liblary.children];
-    console.log(books);
     books.forEach((book) => {
       const _this_ = this; // thisを固定(引数も使いたいため変数に代入)
-      book.removeEventListener("click", {
-        items, _this_,
-        handleEvent: this._openEditDialog,
-      });
       book.addEventListener("click", {
-        items, _this_,
+        items,
+        _this_,
         handleEvent: this._openEditDialog,
       });
     });
-    // if (!items.length) {
-
-    //   const book = document.getElementById(item.iid);
-    //    book.addEventListener("click", {
-    //      items,
-    //      _this_,
-    //      handleEvent: this._openEditDialog,
-    //    });
-    // } else {
-    // }
 
     // 「ポモドーロボタン」でポモドーロ開始
     const pomodoloBtn = document.getElementById("startPomodoloBtn");
-    pomodoloBtn.removeEventListener("click", (e) => {
-      this.pomoBook = this.beforeModified;
-      this.update(page.timer);
-    });
-    pomodoloBtn.addEventListener("click", (e) => {
+    pomodoloBtn.addEventListener("click", () => {
       this.pomoBook = this.beforeModified;
       this.update(page.timer);
     });
 
     // 変更確定ボタンのイベント
     const modifideBtn = document.getElementById("modifiedBtn");
-    modifideBtn.removeEventListener("click", this._modifideEvent.bind(this));
     modifideBtn.addEventListener("click", this._modifideEvent.bind(this));
-
   }
 
-  // 編集ダイアログ表示イベント
-  // クリックした書籍のIDでデータを検索しレイアウトに反映
+  // クリックした書籍のIDでデータを検索し編集ダイアログに反映してオープン
   _openEditDialog(e) {
-    const editD = document.getElementById("editDialog")
-    if (editD.hasAttribute('open')) editD.removeAttribute('open');
+    // モーダルの開閉をチェック
+    const editD = document.getElementById("editDialog");
+    if (editD.hasAttribute("open")) editD.removeAttribute("open");
     editD.showModal();
-    
-    if (!this.items.length) {
+
+    // this = このイベントの変数
+    // _this_ = viewインスタンス
+    if (this.item) {
       // 追加したbookに対しての処理
-      this._this_.beforeModified = this.items;
+      this._this_.beforeModified = this.item;
     } else {
       // 初期読み込み時からあるbookに対しての処理
       for (let item of this.items) {
@@ -191,13 +138,16 @@ class ViewControl {
     //editboxのレイアウト生成しHTMLに追加
     const editBox = document.getElementById("editBox");
     const memoBox = document.getElementById("memoBox");
-    const { textFields, memoField } = __createEditLayout(this._this_.beforeModified);
+    const { textFields, memoField } = __createEditLayout(
+      this._this_.beforeModified
+    );
     editBox.innerHTML = textFields;
     memoBox.innerHTML = memoField;
+
   }
 
   //変更ボタンのイベント
-  _modifideEvent(e) {
+  _modifideEvent() {
     const fields = document.getElementsByClassName("mark");
     // 変更後のデータを変数へ保存
     let afterModified = {};
@@ -206,8 +156,7 @@ class ViewControl {
       if (field.nodeName === "INPUT" || field.nodeName === "TEXTAREA") {
         afterModified[field.id.split("_")[1]] = field.value;
       } else {
-        //ratingはidで
-        //それ以外はtextContentで取得
+        //ratingはidで、それ以外はtextContentで取得
         if (field.id.includes("myRating")) {
           afterModified[field.id.split(":")[0]] = field.id.split(":")[1];
         }
@@ -216,7 +165,7 @@ class ViewControl {
         }
       }
     });
-  
+
     this.beforeModified.description = afterModified.story;
     this.beforeModified.memo = afterModified.memo;
     this.beforeModified.myRating = Number(afterModified.myRating);
@@ -224,11 +173,64 @@ class ViewControl {
     this.beforeModified.title = afterModified.title;
     this.beforeModified.modifideAt = __getTime().time;
 
-    console.log(this.beforeModified);
-    this.db.update(this.beforeModified)
-
+    this.db.update(this.beforeModified);
   }
 
+  //書籍検索ダイアログ
+  searchDialog() {
+
+    //isbnスキャン用カメラ起動
+    const scan = document.getElementById('scan');
+    scan.addEventListener('click', this._openVideo);
+
+    //フィールドがフォーカスされたとき全選択
+    const field = document.getElementById("searchField");
+    field.onfocus = () => field.select();
+
+    //エンターキーで検索処理発動
+    const modal = document.getElementById("searchModal");
+    modal.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.isComposing) {
+        e.preventDefault();
+        this._searchBooks();
+        // 結果が表示されたらフォーカスを外す
+        field.blur();
+      }
+    });
+
+    //検索ボタンで検索処理発動
+    const btn = document.getElementById("searchBtn");
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      this._searchBooks();
+      // 結果が表示されたらフォーカスを外す
+      field.blur();
+    });
+
+    const buunBtn = document.getElementById('buunBtn');
+    const dialog = document.getElementById('searchDialog');
+    let timer = null;
+    dialog.addEventListener('scroll', e => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const topScrollPosition = e.target.scrollTop
+        console.log(topScrollPosition);
+        if (topScrollPosition > 300) {
+          buunBtn.style.display = 'block';
+        } else {
+          buunBtn.style.display = 'none';
+        }
+      }, 100);
+    })
+
+    buunBtn.addEventListener('click', e => {
+      dialog.scroll({
+        top: 0,
+        behavior: "smooth"
+      })
+    })
+  }
 
   // 書籍を検索しHTMLに表示
   async _searchBooks() {
@@ -237,6 +239,20 @@ class ViewControl {
     result.innerHTML = items;
     // viewインスタンス(this)をsearchインスタンスに受け渡し描画を行う => (煩雑になるため良くないと思う)
     this.search.setRegistEvent(this);
+  }
+
+  async _openVideo() {
+    const scan = new Scan();
+    console.log('video!', scan);
+    scan.openScan();
+    goStop.addEventListener('click', e => {
+      e.preventDefault();
+      scan.stop()
+    })
+    goScan.addEventListener('click', e => {
+      e.preventDefault();
+      scan.scan();
+    })
   }
 
   //timerPageではnesCSSは適用しない
@@ -248,7 +264,6 @@ class ViewControl {
       nesLink.disabled = false;
     }
   }
-
 }
 
 

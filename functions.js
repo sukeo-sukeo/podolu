@@ -77,8 +77,8 @@ const __createEditLayout = (item) => {
   `,
     memoField: `
   <label for="edit_memo">感想・メモ</label>
-  <div class="edit-memo">
-    <textarea class="nes-textarea is-dark mark" id="edit_memo" cols="30" rows="5">${item.memo}</textarea>
+  <div class="edit-memo-wrapper">
+    <textarea class="nes-textarea is-dark edit-memo mark" id="edit_memo" cols="30" rows="5">${item.memo}</textarea>
   </div>
   `,
   };

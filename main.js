@@ -22,11 +22,15 @@ const main = (views) => {
 
 
 window.onload = () => {
-
-  
   const views = new ViewControl();
+  const loca = localStorage.getItem("this_location");
+  if (loca) {
+    views.update(page[loca]);
+    localStorage.removeItem("this_location");
+  } else {
+    views.update(page.books)
+  }
   //初期画面のidを渡す
-  views.update(page.books)
   main(views)
 
 }

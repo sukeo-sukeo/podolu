@@ -109,10 +109,10 @@ class Search {
     }
   }
 
-  //描画まで行いたいためviewインスタンスをもってきた
-  setRegistEvent(view) {
+  setRegistEvent() {
     const btns = document.getElementsByClassName("regist-btn");
 
+    // dbへの登録イベントをセット
     [...btns].forEach((btn, i) => {
       btn.setAttribute("id", i);
       btn.addEventListener("click", async (e) => {
@@ -121,102 +121,19 @@ class Search {
         // const iid = new Date().getTime()
         const uid = "";
         const db = new DB(uid, iid);
-        db.add(this.r[e.target.id]);
+        const res = await db.add(this.r[e.target.id]);
+        console.log(res);
 
-        // 登録したデータをドムに反映
-        const item = await db.readone(iid);
-        const liblary = document.getElementById("liblary");
-        const html = `<li><img id="${iid}" src="${item.image}" alt="${item.title}" height=220></li>`;
-        liblary.insertAdjacentHTML("beforeend", html);
-
-        // flexbox最終行左寄せ
-        __adjustLayout();
-
-        // dirlogを閉じる
-        document.getElementById("searchDialog").removeAttribute("open");
-
-        // 検索結果をクリア
-        document.getElementById("result").innerHTML = "";
-
-        // 検索窓もクリア
-        document.getElementById("searchField").value = "";
-
-        //エディットダイアログのイベントセット
-        //描画まで行いたいためviewインスタンスを使用
-        view._setEvent_editDialog(item);
-        // this._setEvent_editDialog(item, view);
+        //登録成功時 res = true
+        if (res) {
+          localStorage.setItem('this_location', 'books')
+          location.reload();
+        } else {
+        //登録失敗時 res = false
+          alert('書籍の登録に失敗しました...')
+        }
       });
     });
-  }
-
-  // 追加された書籍をクリックで編集ダイアログ表示
-  //扱うデータが単体か複数か違うだけでviewsと処理が重複です(途中からじわじわ思ったのですがクラス分けをミスりました)
-  _setEvent_editDialog(item, view) {
-    const book = document.getElementById(item.iid);
-   
-    book.addEventListener("click", {
-      item,
-      view,
-      handleEvent: this._openEditDialog,
-    });
-
-    // 「ポモドーロボタン」でポモドーロ開始
-    const pomodoloBtn = document.getElementById("startPomodoloBtn");
-    pomodoloBtn.addEventListener("click", (e) => {
-      view.pomoBook = item;
-      view.update(page.timer);
-    });
-
-    // 変更確定ボタンのイベント
-    const modifideBtn = document.getElementById("modifiedBtn");
-    modifideBtn.removeEventListener("click", view._modifideEvent.bind(view)); 
-    modifideBtn.addEventListener("click", view._modifideEvent.bind(view)); 
-  }
-
-  //編集ダイアログ表示イベント
-  _openEditDialog(e) {
-    document.getElementById("editDialog").showModal();
-    // クリックした書籍のIDでデータを検索しレイアウトに反映
-    this.view.beforeModified = this.item;
-
-    //editboxのレイアウト生成しHTMLに追加
-    const editBox = document.getElementById("editBox");
-    const memoBox = document.getElementById("memoBox");
-    const { textFields, memoField } = __createEditLayout(this.item);
-    editBox.innerHTML = textFields;
-    memoBox.innerHTML = memoField;
-  }
-
-  //変更ボタンのイベント
-  _modifideEvent() {
-    const fields = document.getElementsByClassName("mark");
-    // 変更後のデータを変数へ保存
-    let afterModified = {};
-    [...fields].forEach((field) => {
-      //inputタグとtextareaタグのデータはvalueで取得
-      if (field.nodeName === "INPUT" || field.nodeName === "TEXTAREA") {
-        afterModified[field.id.split("_")[1]] = field.value;
-      } else {
-        //ratingはidで
-        //それ以外はtextContentで取得
-        if (field.id.includes("myRating")) {
-          afterModified[field.id.split(":")[0]] = field.id.split(":")[1];
-        }
-        if (field.id.includes("edit_pomo")) {
-          afterModified[field.id.split("_")[1]] = field.textContent;
-        }
-      }
-    });
-
-    this.view.beforeModified.description = afterModified.story;
-    this.view.beforeModified.memo = afterModified.memo;
-    this.view.beforeModified.myRating = Number(afterModified.myRating);
-    this.view.beforeModified.pomoCount = Number(afterModified.pomo);
-    this.view.beforeModified.title = afterModified.title;
-    this.view.beforeModified.modifideAt = __getTime().time;
-
-    console.log(this.view.beforeModified);
-    this.view.db.update(this.view.beforeModified);
   }
 
   _getUniqueStr(myStrong) {
@@ -230,3 +147,32 @@ class Search {
 }
 
 export default Search;
+
+
+
+//一応保管↓ 完成後に削除
+// 登録したデータをドムに反映
+    // const item = await db.readone(iid);
+    // const liblary = document.getElementById("liblary");
+    // const html = `<li><img id="${iid}" src="${item.image}" alt="${item.title}" height=220></li>`;
+    // liblary.insertAdjacentHTML("beforeend", html);
+
+    // // flexbox最終行左寄せ
+    // __adjustLayout();
+
+    // // dirlogを閉じる
+    // document.getElementById("searchDialog").removeAttribute("open");
+
+    // // 検索結果をクリア
+    // document.getElementById("result").innerHTML = "";
+
+    // // 検索窓もクリア
+    // document.getElementById("searchField").value = "";
+
+    // //エディットダイアログのイベントセット
+    // const book = document.getElementById(item.iid);
+    // book.addEventListener("click", {
+    //   item,
+    //   view,
+    //   handleEvent: view._openEditDialog,
+    // });

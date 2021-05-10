@@ -3,7 +3,7 @@
   src: url('./assets/PixelMplus12-Regular.ttf');
 }
 /* timerページ以外はファミコン風フォント */
-.main-wrapper:not(#timerPage), .main-modal {
+.main-wrapper:not(#timerPage), .main-modal, .sub-modal {
   font-family: 'MyFont';
 }
 
@@ -197,6 +197,7 @@ h1 {
 }
 #searchDialog .search-fields {
   width: 80%;
+  margin: 0 auto;
 }
 #searchDialog .dialog-menu {
   float: right;
@@ -220,7 +221,6 @@ h1 {
   width: 80%;
   margin-top: 10px;
 }
-
 td:first-of-type {
   width: 20%;
   text-align: center;
@@ -241,6 +241,18 @@ td:first-of-type {
 .nes-table.is-dark::before {
   z-index: -1;
 }
+.buun-btn {
+  display: none;
+  right: 5%;
+  position: fixed;
+  bottom: 10%;
+  z-index: 10;
+}
+#scanResult {
+  position: absolute;
+}
+
+
 
 #editDialog .edit-field-wrapper {
   display: flex;
@@ -279,17 +291,27 @@ td:first-of-type {
   font-size: 75px;
   vertical-align: initial;
 }
-#editDialog .edit-memo {
-  text-align: center;
-}
-#editDialog #edit_memo {
+#editDialog .edit-memo,
+#editTextArea .edit-memo
+ {
   border: none;
   border-bottom: 1px solid;
   width: 95%;
-}
-#edit_memo {
   outline: 0;
   outline : none;
+}
+
+#editTextArea {
+  width: 90%;
+}
+#editTextArea .textarea-menu {
+  display: flex;
+  justify-content: space-between;
+}
+#editTextArea .edit-memo {
+  background: transparent;
+  border: none;
+  /* color: rgb(141, 94, 94); */
 }
 
 

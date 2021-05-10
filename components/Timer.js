@@ -4,8 +4,7 @@ class Timer {
   constructor() {
     this.timer = document.getElementById("timer");
     this.btn = document.getElementById("timerBtn");
-    console.log(this.timer);
-    console.log(this.btn);
+    
     this.second = 0;
     this.minute = 0;
     this.timeText;

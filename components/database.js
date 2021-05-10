@@ -24,9 +24,10 @@ class DB {
     item.myRating = 0;
     console.log(item);
     
-    ref.set({ [this.iid]: item }, { merge: true })
+    return ref.set({ [this.iid]: item }, { merge: true }).then(() => {return true})
       .catch((error) => {
         console.error("Error adding document: ", error);
+        return false;
       });
   }
 
@@ -81,7 +82,7 @@ class DB {
 
 
   async update(item) {
-    console.log('dbupdate');
+    console.log('dbupdate', item);
     db.db.collection("users").doc(this.uid).update({
       [item.iid]: {
         date: item.date,
