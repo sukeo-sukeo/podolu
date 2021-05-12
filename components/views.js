@@ -5,14 +5,20 @@ import Timer from "./Timer.js";
 import Search from './Search.js';
 import DB from './database.js';
 import Scan from './Scan.js';
+import Login from './login.js';
 
 class ViewControl {
   constructor() {
+    this.login = new Login();
     this.db = new DB();
     this.timer = new Timer();
     this.search = new Search();
+    this.scan;
+
+    //ポモ中かどうか
+    this.isPomo = false;
     // ポモドーロするBookData
-    this.pomoBook;
+    this.pomoBook = null;
     // 変更前のBookData
     this.beforeModified;
   }
@@ -31,31 +37,106 @@ class ViewControl {
     });
 
     //書籍選択時の処理
-    if (this.pomoBook) {
+    if (this.isPomo) {
       this.pomodoloPage();
     }
   }
 
   //タイマーページ
   pomodoloPage() {
+    // ログインモーダルボタン
+    document.getElementById('loged').addEventListener('click', e => {
+      e.preventDefault();
+      if (e.target.textContent === 'ログイン') {
+        this.login.openModal();
+      } else {
+        this.login.logout(this.db);
+      }
+    })
+  
+    //サインアップ
+    document.getElementById('signup').addEventListener('click', e => {
+      e.preventDefault();
+      this.login.signup(this.db);
+    })
+    //ログイン
+    document.getElementById('login').addEventListener('click', e => {
+      e.preventDefault();
+      this.login.login(this.db);
+    })
+
+
+    document.getElementById("loginClose").addEventListener('click', e => {
+      e.preventDefault();
+      this.login.closeModal();
+    })
+  
+
+
     //書籍選択時にタイマー画面へ遷移したときは書籍画像をセットしタイマー起動
-    if (this.pomoBook) {
+    if (this.isPomo) {
       const bookImg = document.getElementById("pomoBook");
       const pomoCnt = document.getElementById("pomoCount");
       const bookLog = document.getElementById("bookLog");
       bookImg.src = this.pomoBook.image;
       pomoCnt.textContent = this.pomoBook.pomoCount;
-      bookLog.textContent = this.pomoBook.memo;
+      bookLog.value = this.pomoBook.memo;
 
       // タイマーインスタンスにも書籍データを渡す
       this.timer.pb = this.pomoBook;
+      this.timer.db = this.db;
 
       this.timer.reset();
       this.timer.start();
       return;
     }
 
-    console.log("timerPage ok");
+    //bookセットbtn
+    const setBtn = document.getElementById('bookSet');
+    setBtn.addEventListener('click', e => {
+      if (!this.login.hasUid()) return;
+      this.pomoJudege();
+    }) 
+
+    //セット解除btn
+    const offBtn = document.getElementById('bookOff');
+    offBtn.addEventListener('click', e => {
+      if (!this.login.hasUid()) return;
+      if (!this.isPomo) {
+        alert("書籍をセットしてください");
+        return;
+      }
+      this.pomoJudege('flag');
+    }) 
+
+    const logModal = document.getElementById('logModal')
+
+    // 感想ダイアログ内での入力をLSに一時保存
+    const textArea = document.getElementById("logModalArea");
+    textArea.addEventListener("keydown", (e) => {
+      localStorage.setItem("pomoLog", e.target.value);
+    });
+
+    // 感想ダイアログ開くボタン
+    const logArea = document.getElementById('bookLog');
+    logArea.addEventListener('click', e => {
+      if (!this.isPomo) return;
+      localStorage.setItem('pomoLog', this.pomoBook.memo)
+      textArea.value = this.pomoBook.memo;
+      logModal.showModal();
+    });
+
+    // 感想ダイアログ閉じるボタン
+    const logCloseBtn = document.getElementById('logClose');
+    logCloseBtn.addEventListener('click', e => {
+      const text = localStorage.getItem('pomoLog')
+      this.pomoBook.memo = text;
+      logArea.value = text;
+      this.db.update(this.pomoBook);
+      localStorage.removeItem('pomoLog');
+      logModal.close();
+    });
+
 
     this.timer.btn.addEventListener(
       "mousedown",
@@ -69,28 +150,75 @@ class ViewControl {
     });
   }
 
+  // ポモ中かどうか判定
+  pomoJudege(flag = null) {
+    const image = document.getElementById("pomoBook");
+    const logArea = document.getElementById("bookLog");
+    if (this.isPomo) {
+      if (!confirm("タイマーがリセットされます")) return;
+    }
+    this.timer.reset();
+    this.isPomo = false;
+    image.src = "./assets/no_image2.png";
+    logArea.value = "Please write your impression";
+    this.timer.pomoText.textContent = 0;
+    this.timer.pb = null;
+    if (flag === 'flag') return; 
+    this.update(page.books);
+  }
+
   //書籍管理ページ
   async booksPage() {
-    console.log("booksPage ok");
+    // userデータ取得
+    const user = await this.login.checkUser(this.db);
+    const loged = document.getElementById("loged");
+    user
+      ? (loged.textContent = this.login.name)
+      : (loged.textContent = "ログイン");
 
-    const items = await this.db.read();
+    // timer画面へのボタン
+    const backBtn = document.getElementById("backTimer");
+    backBtn.addEventListener("click", (e) => {
+      this.update(page.timer);
+    });
 
-    if (!items) return;
+    //検索ダイアログ開閉
+    const serachArea = document.getElementById("searchArea");
+    serachArea.addEventListener("click", (e) => {
+      document.getElementById("searchDialog").showModal();
+    });
+    //書籍検索ダイアログのイベント設定
+    this._setEventOfSearchDialog();
 
+    // 登録済のデータ取得
+    const items = await this.db.read(user);
+    if (items) {
+      // 登録済データのDOM挿入
+      this._setBooks(items);
+      // 登録済データのイベント設定
+      this._setEventOfEditDialog(items);
+    }
+  }
+
+  // 登録済のデータ表示
+  _setBooks(items, add=false) {
     const text = items.map((item) => {
       return `
       <li><img src="${item.image}" alt="${item.title}" height=220 id="${item.iid}"></li>`;
     });
-
-    // 登録した書籍をHTMLに追加
+    // 登録済書籍データをHTMLに追加
     const liblary = document.getElementById("liblary");
-    liblary.innerHTML = text.join("");
-
+    if (add) {
+      liblary.insertAdjacentHTML('beforeend', text.join(''))
+    } else {
+      liblary.innerHTML = text.join("");
+    }
     //レイアウト調整
     __adjustLayout();
-
-
-    //編集ダイアログ開閉のイベントセット
+  }
+  
+  //編集ダイアログ開閉のイベントセット
+  _setEventOfEditDialog(items) {
     const books = [...liblary.children];
     books.forEach((book) => {
       const _this_ = this; // thisを固定(引数も使いたいため変数に代入)
@@ -105,6 +233,7 @@ class ViewControl {
     const pomodoloBtn = document.getElementById("startPomodoloBtn");
     pomodoloBtn.addEventListener("click", () => {
       this.pomoBook = this.beforeModified;
+      this.isPomo = true;
       this.update(page.timer);
     });
 
@@ -115,9 +244,10 @@ class ViewControl {
 
   // クリックした書籍のIDでデータを検索し編集ダイアログに反映してオープン
   _openEditDialog(e) {
+    if (e.target.className === 'damey') return;
     // モーダルの開閉をチェック
     const editD = document.getElementById("editDialog");
-    if (editD.hasAttribute("open")) editD.removeAttribute("open");
+    if (editD.hasAttribute("open")) editD.close();
     editD.showModal();
 
     // this = このイベントの変数
@@ -176,12 +306,54 @@ class ViewControl {
     this.db.update(this.beforeModified);
   }
 
-  //書籍検索ダイアログ
-  searchDialog() {
+  //書籍検索ダイアログのイベント設定
+  _setEventOfSearchDialog() {
 
     //isbnスキャン用カメラ起動
-    const scan = document.getElementById('scan');
-    scan.addEventListener('click', this._openVideo);
+    //あとで処理を分割させる!
+    const scan = document.getElementById("scan");
+    const videoD = document.getElementById("videoModal");
+    scan.addEventListener("click", e => {
+      videoD.showModal();
+      
+      if (!this.scan) {
+        this.scan = new Scan();
+      }
+      this.scan.init();
+    });
+
+    // スキャン停止ボタンとスキャン開始ボタンの設定
+     const goStop = document.getElementById("goStop");
+     const goScan = document.getElementById("goScan");
+     
+     let timer_ID = null; 
+     goStop.addEventListener("click", (e) => {
+       e.preventDefault();
+       this.scan.stop();
+       videoD.close();
+       clearTimeout(timer_ID);
+       timer_ID = null
+     });
+    
+     goScan.addEventListener("click", async (e) => {
+       e.preventDefault();
+
+       timer_ID = setTimeout(() => {
+         if (videoD.hasAttribute("open")) {
+           this.scan.stop();
+           videoD.close();
+           alert("読み取れませんでした");
+          }
+       }, 10000);
+    
+       const res = await this.scan.scan();
+       
+       const input = document.getElementById("searchField");
+       input.value = res;
+       videoD.close();
+       this._searchBooks();
+      //  clearTimeout(timer);
+     });
 
     //フィールドがフォーカスされたとき全選択
     const field = document.getElementById("searchField");
@@ -200,7 +372,6 @@ class ViewControl {
 
     //検索ボタンで検索処理発動
     const btn = document.getElementById("searchBtn");
-
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       this._searchBooks();
@@ -208,28 +379,32 @@ class ViewControl {
       field.blur();
     });
 
-    const buunBtn = document.getElementById('buunBtn');
-    const dialog = document.getElementById('searchDialog');
+    //ビューンボタンの処理
+    const buunBtn = document.getElementById("buunBtn");
+    const dialog = document.getElementById("searchDialog");
     let timer = null;
-    dialog.addEventListener('scroll', e => {
+    dialog.addEventListener("scroll", (e) => {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        const topScrollPosition = e.target.scrollTop
-        console.log(topScrollPosition);
+        const topScrollPosition = e.target.scrollTop;
+       
         if (topScrollPosition > 300) {
-          buunBtn.style.display = 'block';
+          buunBtn.style.display = "block";
         } else {
-          buunBtn.style.display = 'none';
+          buunBtn.style.display = "none";
         }
       }, 100);
-    })
-
-    buunBtn.addEventListener('click', e => {
+    });
+    buunBtn.addEventListener("click", (e) => {
       dialog.scroll({
         top: 0,
-        behavior: "smooth"
-      })
-    })
+        behavior: "smooth",
+      });
+    });
+
+    //閉じるボタンの処理
+    const closeBtn = document.getElementById("serachColseBtn");
+    closeBtn.addEventListener("click", (e) => dialog.close());
   }
 
   // 書籍を検索しHTMLに表示
@@ -239,20 +414,6 @@ class ViewControl {
     result.innerHTML = items;
     // viewインスタンス(this)をsearchインスタンスに受け渡し描画を行う => (煩雑になるため良くないと思う)
     this.search.setRegistEvent(this);
-  }
-
-  async _openVideo() {
-    const scan = new Scan();
-    console.log('video!', scan);
-    scan.openScan();
-    goStop.addEventListener('click', e => {
-      e.preventDefault();
-      scan.stop()
-    })
-    goScan.addEventListener('click', e => {
-      e.preventDefault();
-      scan.scan();
-    })
   }
 
   //timerPageではnesCSSは適用しない

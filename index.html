@@ -10,14 +10,10 @@
 </head>
 
 <body>
+  
+  <span id="loged" style="color: aliceblue;">ログイン</span>
 
   <div class="main-container">
-    <header>
-      <!-- hrefとmain-wrapperのid名は合わせること -->
-      <a href="timerPage">ポモドーロ</a>
-      <a href="booksPage">書籍管理</a>
-      <button id="testbtn">読み出し</button>
-    </header>
 
     <!-- ポモドーロタイマーページのHTML -->
     <div class="main-wrapper" id="timerPage">
@@ -27,27 +23,34 @@
         <button id="timerBtn">start</button>
       </div>
 
-
-
       <div class="book-image" id="bookImage">
-        <p><span class="pomo-count" id="pomoCount">0</span>ポモドーロ</p>
-        <img id="pomoBook" src="./assets/no_image.png" alt="">
+        <p>
+          <span class="pomo-count" id="pomoCount">0</span>ポモドーロ
+        </p>
+        <img id="pomoBook" src="./assets/no_image2.png" alt="">
+        <div class="bookmenu">
+          <span id="bookSet">書籍をセット</span>
+          <span id="bookOff">書籍をはずす</span>
+        </div>
       </div>
 
       <div class="log-wrapper">
-        <textarea class="book-log" name="book-log" id="bookLog" cols="30" rows="200"></textarea>
+        <textarea class="book-log" name="book-log" id="bookLog" cols="30" rows="50" readonly>Please write your impression</textarea>
       </div>
 
     </div>
 
     <!-- 書籍管理ページのHTML -->
     <div class="main-wrapper" id="booksPage">
+      <!-- <i class="nes-bcrikko is-small"></i> -->
+      <img class="nes-avatar is-rounded is-medium" alt="Gravatar image example" src="https://www.gravatar.com/avatar?s=15"
+        style="image-rendering: pixelated;" id="backTimer">
       <div class="nes-field is-inline">
         <input 
         type="text" 
         class="nes-input is-success"
         placeholder="本のタイトル もしくは ISBNコードで検索"
-        onclick="document.getElementById('searchDialog').showModal();"
+        id="searchArea"
         >
       </div>
       <ul class="book-img-wrapper" id="liblary">
@@ -63,20 +66,19 @@
          class="nes-dialog is-dark is-rounded" id="searchDialog">
           <form method="dialog">
             <menu class="dialog-menu">
-              <button class="nes-btn">閉じる</button>
+              <button class="nes-btn" id="serachColseBtn">閉じる</button>
             </menu>
             <h2 class="title">書籍の検索</h2>
             <!-- 検索入力フィールド -->
             <div class="nes-field search-fields">
               <label for="title_field">タイトル・ISBN</label>
-              <input type="text" id="searchField" class="nes-input is-dark">
+              <input type="text" id="searchField" 
+              value=""
+              class="nes-input is-dark">
               <div class="sub-field">
-                <button id="goStop">ストップ</button>
-                <button id="goScan">スキャン</button>
                 <div class="scan-btn" id="scan">
                   <span>本のバーコードをスキャン</span>
                   <i class="nes-icon instagram"></i>
-                  <div id="scanResult"></div>
                 </div>
                 <button class="nes-btn is-primary" id="searchBtn">検索</button>
               </div>
@@ -120,23 +122,62 @@
       </section>
     </div>
 
-    <!-- <div class="sub-modal">
+    <!-- scanモーダルのHTML -->
+    <div class="sub-modal">
       <section>
-        <dialog class="nes-dialog is-dark is-rounded" id="editTextArea">
-          <form method="dialog">
-            <menu class="dialog-menu textarea-menu">
-              <p class="title" id="memoTitle"></p>
-              <button class="nes-btn" id="memoCloseBtn">書き終える</button>
-            </menu>
-            <textarea class="nes-textarea is-dark edit-memo" name="" id="editTextBox" cols="30" rows="20"></textarea>
+        <dialog class="nes-dialog is-dark is-rounded" id="videoModal">
+          <div id="scanResult">
+            <!-- video -->
+          </div>
+          <menu class="dialog-menu textarea-menu">
+            <button id="goStop">ストップ</button>
+            <button id="goScan">スキャン</button>
+          </menu>
+        </dialog>
+      </section>
+    </div>
+
+    <!-- booklogモーダルのHTML -->
+    <div class="sub-modal">
+      <section>
+        <dialog id="logModal">
+          <textarea class="book-log" name="" id="logModalArea" cols="80" rows="200"></textarea>
+          <span id="logClose">close</span>
+        </dialog>
+      </section>
+    </div>
+
+
+    <!-- ログインモーダル -->
+    <div id="loginContainer">
+      <section>
+        <dialog id="loginDialog">
+          <form autocomplete="off">
+            <div class="form-group">
+              <p id="loginClose">close</p>
+              <div class="input-outer">
+                <label for="name">User name</label>
+                <input :placeholder="inputUsername" type="text" id="name" class="name" v-model="user.name">
+              </div>
+              <div class="input-outer">
+                <label for="email">Email address</label>
+                <input type="email" id="email" class="email" v-model="user.email">
+              </div>
+              <div class="input-outer">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="password" v-model="user.password">
+              </div>
+              <div class="btn-group">
+                <button class="signup-btn" id="signup">signUP</button>
+                <button class="login-btn" id="login">logIN</button>
+              </div>
+            </div>
+            <span id="errorM"></span>
+            <p>初めての方は「signUP」をしてください!</p>
           </form>
         </dialog>
       </section>
-    </div> -->
-
-
-
-
+    </div>
 
 
   </div>

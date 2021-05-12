@@ -2,29 +2,33 @@
 import db from './firebase.js'
 
 class DB {
-  constructor(uid, iid) {
+  constructor() {
     // this.uid = uid;
-    this.iid = iid;
-    this.uid = "MGFOqcA8I2eVYLAE4PwrvJ0M53s1";
+    // this.iid = iid;
+    // ページ表示の最初にlogin.jsから受け取る
+    this.uid;
+    this.name;
   }
   
   //DBへの登録
-  async add(item) {
+  async add(item, iid) {
+  
     const ref = await db.db.collection("users").doc(this.uid);
-
-    //カスタムプロパティ
-    const { time, mili } = __getTime()
-    item.registedAt = time
-    item.modifideAt = time;
-    item.sortKey = mili
-    item.uid = this.uid
-    item.iid = this.iid
-    item.pomoCount = 0;
-    item.memo = '';
-    item.myRating = 0;
-    console.log(item);
     
-    return ref.set({ [this.iid]: item }, { merge: true }).then(() => {return true})
+    if (iid !== 'userData') {
+      //カスタムプロパティ
+      const { time, mili } = __getTime()
+      item.registedAt = time
+      item.modifideAt = time;
+      item.sortKey = mili
+      item.uid = this.uid
+      item.iid = iid
+      item.pomoCount = 0;
+      item.memo = '';
+      item.myRating = 0;
+    }
+    
+    return ref.set({ [iid]: item }, { merge: true }).then(() => {return true})
       .catch((error) => {
         console.error("Error adding document: ", error);
         return false;
@@ -33,26 +37,37 @@ class DB {
 
   //登録後の１件読み出し
   async readone(iid) {
-    return db.db.collection("users").doc(this.uid)
-    .get()
+    return db.db
+      .collection("users")
+      .doc(this.uid)
+      .get()
       .then((doc) => {
-        const item = doc.data()[iid]
-        return item
-    })
+        if (iid === 'getUser') {
+          const item = doc.data()['userData'];
+          return item.name;
+        }
+        const item = doc.data()[iid];
+        delete item["userData"];
+        return item;
+      })
       .catch((error) => {
-      console.log(error);
-    })
+        console.log(error);
+      });
   }
 
   //初期読み込み
-  async read() {
-    const doc = await db.db.collection("users")
-      .doc(this.uid).get();
+  async read(user) {
+    if (!user) return;
+    const doc = await db.db
+      .collection("users")
+      .doc(this.uid)
+      .get();
     
     const dataList = doc.data();
-
+    this.name = dataList['userData'].name;
+    delete dataList["userData"];
     if (!dataList) return;
-
+    
     //timestamp(sortkey)で並べ替え
     let beforeSortObj = []
     Object.keys(dataList).forEach(key => {

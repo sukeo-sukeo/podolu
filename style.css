@@ -47,23 +47,30 @@ h1 {
 .title {
   text-align: center;
 }
+
+#loged {
+  font-family: Georgia, serif;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  margin-top: 20px;
+  margin-right: 50px;
+}
+/* timerPageのCSS */
 .pomo-count {
   font-size: 50px;
   vertical-align: text-bottom;
 }
-/* .main-wrapper {
-  display: flex;
-} */
-
-/* timerPageのCSS */
 .book-image {
   width: 240px;
   position: absolute;
   left: 3%;
   top: 40%;
+  /* cursor: pointer; */
 }
 .book-image img {
    width: 240px;
+   height: 350px;
 }
 .book-image p {
   font-family: Georgia, serif;
@@ -73,6 +80,13 @@ h1 {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
+}
+.bookmenu {
+  cursor: pointer;
+  font-family: Georgia, serif;
+  display: flex;
+  justify-content: space-between;
+  color: white;
 }
 
 .timer-wrapper {
@@ -141,15 +155,31 @@ h1 {
   border: none;
   font-size: 20px;
   font-family: Georgia, serif;
-  color : transparent;
-  text-shadow : 0 0 0 #fff;
+  color: #fff;
+  /* color : transparent;
+  text-shadow : 0 0 0 #fff; */
 }
-
 .book-log:focus {
   outline: 0;
   outline : none;
 }
 
+#logModal {
+  background: rgba(0,0,0,0.4);
+  border: none;
+  width: 65%;
+  height: 90%;
+  margin-bottom: 1%;
+  margin-right: 1%;
+}
+#logClose {
+  cursor: pointer;
+  position: fixed;
+  color: white;
+  right: 2%;
+  bottom: 2%;
+  /* z-index: 10000; */
+}
 /* booksPageのCSS */
 #booksPage .nes-field {
   width: 40%;
@@ -163,7 +193,10 @@ h1 {
   opacity: .7;
   color: #fff;
 }
-
+#booksPage #backTimer {
+  position: absolute;
+  margin: 15px;
+}
 .book-img-wrapper {
   display: flex;
   justify-content: space-evenly;
@@ -183,7 +216,7 @@ h1 {
   margin-top: 10px;
   width: 18vw;
   max-width: 180px;
-  opacity: .9;
+  /* opacity: .9; */
   
 }
 
@@ -200,7 +233,7 @@ h1 {
   margin: 0 auto;
 }
 #searchDialog .dialog-menu {
-  float: right;
+  position: relative;
 }
 #searchDialog .sub-field {
   display: flex;
@@ -212,6 +245,14 @@ h1 {
 }
 #searchDialog #searchBtn {
   flex-grow: 1;
+}
+#searchDialog #serachColseBtn {
+  position: absolute;
+  width: max-content;
+  right: 5%;
+}
+#result {
+  margin-top: 50px;
 }
 #result .img-wrapper {
   text-align: center;
@@ -248,8 +289,27 @@ td:first-of-type {
   bottom: 10%;
   z-index: 10;
 }
+
+/* #videoModal {
+  width: 50%;
+  height: 55%;
+} */
 #scanResult {
-  position: absolute;
+  overflow: hidden;
+  width: 320px;
+  height: 100px;
+  margin: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+#videoModal video,
+#videoModal canvas {
+  width: 320px;
+  height: 240px;
+}
+#videoModal canvas {
+  margin-left: -320px;
 }
 
 
@@ -313,6 +373,97 @@ td:first-of-type {
   border: none;
   /* color: rgb(141, 94, 94); */
 }
+
+
+/* ログインコンテナーのCSS */
+#loginContainer #loginDialog {
+  font-family: Georgia, serif;
+  width: 50%;
+  height: 50vh;
+}
+#loginContainer form {
+  /* widows: 100vw; */
+  height: 100%;
+  background: black; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+#loginContainer .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#loginContainer .btn-group {
+  margin-top: 30px;
+}
+#loginContainer .input-outer {
+  font-family: 'Rhodium Libre', serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  width: 70%;
+  margin-top: 20px;
+}
+#loginContainer .name, .email, .password {
+  font-family: 'Rhodium Libre', serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  height: 24px;
+  background: black;
+  border: none;
+  border-bottom: solid 2px white;
+  /* display: flex;
+  flex-direction: column; */
+}
+#loginContainer input:focus {
+  outline: 0;
+}
+#loginContainer button:focus {
+  outline: 0;
+}
+#loginContainer .login-btn,
+#loginContainer .signup-btn {
+	/* position: relative; */
+  font-family: 'Rhodium Libre', serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+	width: 80px;
+	padding: 0.8em;
+	text-align: center;
+	font-weight: bold;
+	text-decoration: none;
+  background: black;
+	color: white;
+  border: none;
+  cursor: pointer;
+	/* transition: .4s; */
+}
+#loginContainer p {
+  text-align: center;
+  color: #fff;
+  margin: 0;
+}
+#loginContainer #errorM {
+  text-align: center;
+  color: red;
+}
+#loginContainer #loginClose {
+  align-self: flex-end;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+
+
+
 
 
 /* スマホサイズ */

@@ -4,36 +4,48 @@ class Timer {
   constructor() {
     this.timer = document.getElementById("timer");
     this.btn = document.getElementById("timerBtn");
+    this.pomoText = document.getElementById("pomoCount");
     
     this.second = 0;
     this.minute = 0;
     this.timeText;
     this.intervalID;
 
+    // 休憩中かどうか
+    this.isRest = false;
+    this.isMove = false;
+
     // pomodol中のbook
     this.pb;
-  }
 
-  _rest() {
-    //休憩中の処理
-    //5分
-    //ボタンの色を赤に
-    //ボタンのテキストをrelax...に
-    //現在のポモドーロ回数の表示
-    //データにポモドーロ回数を持たせる
+    // database
+    this.db;
   }
 
   countUp() {
+    // 読書中のとき
     if (this.minute === 25) {
       if (this.pb) {
         this.pb.pomoCount += 1;
-        alert("ポモドーロ ", this.pb.pomoCount);
-      } else {
-        alert("ポモドーロ ");
       }
+      this.pomoText.textContent = this.pb.pomoCount;
+      this.db.update(this.pb);
+      alert(this.pb ? `ポモドーロ${this.pb.pomoCount}回目達成!`: 'ポモドーロ！' );
       this._timerInit();
-      this._rest()
+      this.isRest = true;
+      this.start();
       return;
+    }
+
+    //休憩中のとき
+    if (this.isRest) {
+      if (this.minute == 5) {
+        alert('休憩終了...');
+        this._timerInit();
+        this.isRest = false;
+        this.start();
+        return;
+      }
     }
 
     this.second++;
@@ -58,8 +70,13 @@ class Timer {
   }
 
   start() {
-    console.log(this.pb);
-    this.btn.textContent = "stop";
+    this.isMove = true;
+    if (this.isRest) {
+      this.btn.textContent = "relax";
+      //btnカラーチェンジする
+    } else {
+      this.btn.textContent = "stop";
+    }
     this.intervalID = setInterval(() => this.countUp(), 1000);
   }
 
@@ -69,9 +86,10 @@ class Timer {
   }
 
   reset() {
-    console.log("do reset");
     this.stop();
     this._timerInit();
+    this.isRest = false;
+    this.isMove = false;
   }
 
   pushJudege(pushTime) {
@@ -100,6 +118,8 @@ class Timer {
     this.minute = 0;
     this.timeText = "";
     this.timer.textContent = `00:00`;
+    this.isRest = false;
+    this.isMove = false;
   }
 }
 

@@ -2,9 +2,9 @@
 
 import DB from './database.js';
 
-testbtn.addEventListener("click", (e) => {
-  new DB().delete()
-});
+// testbtn.addEventListener("click", (e) => {
+//   new DB().delete()
+// });
 
 class Search {
   constructor() {
@@ -13,12 +13,12 @@ class Search {
     this.q;
     // result
     this.r;
+
   }
 
   async searchBooks() {
     const items = await this._fetchAPI();
 
-    console.log(items);
     if (!items) {
       return `<h2 style="text-align:center;">見つかりませんでした<h2>`;
     }
@@ -39,15 +39,12 @@ class Search {
 
     if (!data.totalItems) return;
 
-    console.log(data);
     const itemCount = data.totalItems;
-    console.log(itemCount);
 
     const items = data.items.map((item) => {
       let vi = item.volumeInfo;
       let isbn = this._getIsbn(vi);
-      // let si = item.saleInfo;
-      // console.log(String(vi.description).length);
+      
       return {
         title: vi.title,
         description: vi.description ? vi.description : "未登録",
@@ -99,17 +96,14 @@ class Search {
   _checkPattern(input) {
     //10桁以上13桁以下の数字かどうかをチェック
     const pattern = /^([0-9]{10,13})$/;
-    console.log(pattern.test(input.value));
     if (pattern.test(input.value)) {
-      console.log("isbn");
       this.q = `isbn:${input.value}`;
     } else {
-      console.log("テキスト");
       this.q = input.value;
     }
   }
 
-  setRegistEvent() {
+  setRegistEvent(view) {
     const btns = document.getElementsByClassName("regist-btn");
 
     // dbへの登録イベントをセット
@@ -119,19 +113,18 @@ class Search {
         // データベースに登録
         const iid = this._getUniqueStr();
         // const iid = new Date().getTime()
-        const uid = "";
-        const db = new DB(uid, iid);
-        const res = await db.add(this.r[e.target.id]);
-        console.log(res);
+        const res = await view.db.add(this.r[e.target.id], iid);
 
         //登録成功時 res = true
         if (res) {
-          localStorage.setItem('this_location', 'books')
-          location.reload();
+          const item = await view.db.readone(iid);
+          view._setBooks([item], 'add')
+          view._setEventOfEditDialog([item]);
         } else {
         //登録失敗時 res = false
           alert('書籍の登録に失敗しました...')
         }
+        document.getElementById("searchDialog").close();
       });
     });
   }
