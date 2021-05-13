@@ -97,7 +97,6 @@ class DB {
 
 
   async update(item) {
-    console.log('dbupdate', item);
     db.db.collection("users").doc(this.uid).update({
       [item.iid]: {
         date: item.date,
@@ -117,8 +116,7 @@ class DB {
         title: item.title,
         uid: item.uid,
       }
-    }).then(() => console.log('success!'))
-    .catch((error) => console.log('error: ', error))
+    }).catch((error) => console.log('error: ', error))
   }
   
 

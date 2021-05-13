@@ -7,29 +7,34 @@ class Scan {
   }
 
   init() {
-    this.Quagga.init({
-      inputStream: {
-        name : "Live",
-        type : "LiveStream",
-        target: document.querySelector('#scanResult'),    // Or '#yourElement' (optional)
-        constraints: {
-          width: 640,
-          height: 480
-        }
+    this.Quagga.init(
+      {
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: document.querySelector("#scanResult"), // Or '#yourElement' (optional)
+          constraints: {
+            width: 640,
+            height: 480,
+          },
+        },
+        decoder: {
+          readers: ["ean_reader"],
+        },
       },
-      decoder : {
-        readers : ["ean_reader"]
-      }
-    },
       function (err) {
         if (err) {
           console.log(err);
-          return
+          return;
         }
         console.log("Initialization finished. Ready to start");
-        Quagga.start();
-      });
-    }
+      }
+    );
+  }
+  
+  start() {
+    this.Quagga.start();
+  }
 
   stop() {
     this.Quagga.stop();

@@ -25,6 +25,7 @@ class Timer {
   countUp() {
     // 読書中のとき
     if (this.minute === 25) {
+      navigator.vibrate(500);
       if (this.pb) {
         this.pb.pomoCount += 1;
       }
@@ -40,6 +41,8 @@ class Timer {
     //休憩中のとき
     if (this.isRest) {
       if (this.minute == 5) {
+        navigator.vibrate(500);
+        
         alert('休憩終了...');
         this._timerInit();
         this.isRest = false;

@@ -62,7 +62,7 @@ class Login {
         })
    }
   
-  login(db) {
+  login(db, view) {
     this.getInput();
     auth.auth
       .signInWithEmailAndPassword(this.inputData.email, this.inputData.password)
@@ -76,7 +76,7 @@ class Login {
         this.name = username;
         db.name = username;
         alert('成功しました！')
-        document.getElementById("loged").textContent = this.name;;
+        view.booksPage();
         this.closeModal();
       })
       .catch((err) => {

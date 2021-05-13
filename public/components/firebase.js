@@ -1,6 +1,6 @@
 'use strict'
 
-import env from '../env.js';
+import env from './env.js';
 
 const firebaseConfig = {
   apiKey: env.apiKey,

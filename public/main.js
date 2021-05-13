@@ -4,6 +4,7 @@ import ViewControl from './components/views.js';
 
 const views = new ViewControl();
 
+
 const main = () => {
   views.update(page.timer)
   views.pomodoloPage();
@@ -11,7 +12,7 @@ const main = () => {
 }
 
 window.onload = () => {
-  
+  // __swipe();
   main()
 
 }

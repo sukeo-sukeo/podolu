@@ -13,7 +13,7 @@ class ViewControl {
     this.db = new DB();
     this.timer = new Timer();
     this.search = new Search();
-    this.scan;
+    this.scan = new Scan();
 
     //ポモ中かどうか
     this.isPomo = false;
@@ -62,7 +62,7 @@ class ViewControl {
     //ログイン
     document.getElementById('login').addEventListener('click', e => {
       e.preventDefault();
-      this.login.login(this.db);
+      this.login.login(this.db, this);
     })
 
 
@@ -179,13 +179,16 @@ class ViewControl {
     // timer画面へのボタン
     const backBtn = document.getElementById("backTimer");
     backBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       this.update(page.timer);
     });
 
     //検索ダイアログ開閉
     const serachArea = document.getElementById("searchArea");
     serachArea.addEventListener("click", (e) => {
-      document.getElementById("searchDialog").showModal();
+      const dialog = document.getElementById("searchDialog")
+      if (dialog.hasAttribute('open')) dialog.removeAttribute('open');
+      dialog.showModal();
     });
     //書籍検索ダイアログのイベント設定
     this._setEventOfSearchDialog();
@@ -313,12 +316,8 @@ class ViewControl {
     //あとで処理を分割させる!
     const scan = document.getElementById("scan");
     const videoD = document.getElementById("videoModal");
-    scan.addEventListener("click", e => {
+    scan.addEventListener("click", async e => {
       videoD.showModal();
-      
-      if (!this.scan) {
-        this.scan = new Scan();
-      }
       this.scan.init();
     });
 
