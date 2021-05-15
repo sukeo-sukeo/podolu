@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" id="nes" disabled/>
+  <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" type="text/css" rel="stylesheet" id="nes" disabled/>
   <link rel="stylesheet" href="./style.css">
   <title>ポモドーる？</title>
 </head>
@@ -61,7 +61,7 @@
     <!-- 書籍検索モーダルのHTML -->
     <div class="main-modal" id="searchModal">
       <section>
-        <dialog 
+        <dialog
          class="nes-dialog is-dark is-rounded" id="searchDialog">
           <form method="dialog">
             <menu class="dialog-menu">
@@ -148,7 +148,7 @@
 
 
     <!-- ログインモーダル -->
-    <div id="loginContainer">
+    <div class="sub-modal" id="loginContainer">
       <section>
         <dialog id="loginDialog">
           <form autocomplete="off">
@@ -177,6 +177,8 @@
         </dialog>
       </section>
     </div>
+
+    <div id="modal-overlay"></div>
 
 
   </div>

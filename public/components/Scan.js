@@ -28,6 +28,7 @@ class Scan {
           return;
         }
         console.log("Initialization finished. Ready to start");
+        Quagga.start();
       }
     );
   }
@@ -54,7 +55,7 @@ class Scan {
 
     return new Promise((resolve, reject) => {
       this.Quagga.onDetected((success) => {
-        if (this.result.length > 10) {
+        if (this.result.length > 20) {
           let count = {};
           for (let i = 0; i < this.result.length; i++) {
             let elm = this.result[i];

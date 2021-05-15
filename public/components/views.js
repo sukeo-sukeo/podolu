@@ -187,7 +187,7 @@ class ViewControl {
     const serachArea = document.getElementById("searchArea");
     serachArea.addEventListener("click", (e) => {
       const dialog = document.getElementById("searchDialog")
-      if (dialog.hasAttribute('open')) dialog.removeAttribute('open');
+      // if (dialog.hasAttribute('open')) dialog.removeAttribute('open');
       dialog.showModal();
     });
     //書籍検索ダイアログのイベント設定
@@ -336,7 +336,7 @@ class ViewControl {
     
      goScan.addEventListener("click", async (e) => {
        e.preventDefault();
-
+      //  this.scan.start();
        timer_ID = setTimeout(() => {
          if (videoD.hasAttribute("open")) {
            this.scan.stop();

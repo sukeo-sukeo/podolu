@@ -62,10 +62,17 @@ class DB {
       .collection("users")
       .doc(this.uid)
       .get();
-    
+      
     const dataList = doc.data();
+
+    
     this.name = dataList['userData'].name;
     delete dataList["userData"];
+    // mixe contant errorを防ぐ処理
+    for (let key of Object.keys(dataList)) {
+      dataList[key].image = dataList[key].image.replace('http', 'https');
+    }
+  
     if (!dataList) return;
     
     //timestamp(sortkey)で並べ替え
