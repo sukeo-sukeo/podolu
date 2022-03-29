@@ -24,7 +24,6 @@ https://pomodo-lu.firebaseapp.com/
 ***
 ## 使用技術
 `javascript`
-- pure.js
 - フレームワーク無しで疑似SPAを実装  
 
 `nes.css`
